@@ -25,6 +25,7 @@ $config = [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+            //'defaultRoles' => ['admin', 'manage', 'employee'],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -35,6 +36,11 @@ $config = [
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
             'useFileTransport' => true,
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

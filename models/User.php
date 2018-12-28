@@ -1,8 +1,15 @@
 <?php
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+
+/**
+ * Class User
+ * @package app\models
+ * @property $id_department int
+ */
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -22,6 +29,27 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentity($id)
     {
         return static::findOne($id);
+    }
+
+    public function rules()
+    {
+        return [
+            [
+                ['username','password', 'id_department'], 'required'
+            ],
+            [
+                ['username', 'password'], 'string',
+            ],
+            [
+                ['username'], 'unique'
+            ],
+            [
+                ['id_department'], 'integer'
+            ],
+//            [
+//                ['id_department'], 'exist', 'targetClass' => '\app\models\Department', 'targetAttribute' => 'id', 'message' => Yii::t('app', 'this department not exist')
+//            ]
+        ];
     }
 
     /**
@@ -82,4 +110,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return \Yii::$app->security->validatePassword($password, $this->password);
     }
+
+    public function getDepartment()
+    {
+        $department = Department::findOne($this->id_department);
+        if ($department){
+            return $department->name;
+        }
+        return "";
+
+    }
+
 }

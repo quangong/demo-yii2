@@ -3,27 +3,25 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\User;
-use app\models\UserSearch;
+use app\models\Department;
+use app\models\DepartmentSearch;
 use yii\web\NotFoundHttpException;
-use yii\web\ForbiddenHttpException;
 
 /**
- * UserController implements the CRUD actions for User model.
+ * DepartmentController implements the CRUD actions for Department model.
  */
-class UserController extends MyController
+class DepartmentController extends MyController
 {
 
-
-
     /**
-     * Lists all User models.
+     * Lists all Department models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();//die(var_dump(Yii::$app->authManager->getRolesByUser(Yii::$app->user->id)));
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new DepartmentSearch();
+//die(var_dump($searchModel));
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);//die(var_dump($searchModel));
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -31,7 +29,7 @@ class UserController extends MyController
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single Department model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -44,24 +42,15 @@ class UserController extends MyController
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new Department model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new User();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->authKey = Yii::$app->security->generateRandomString();
-            $model->password = Yii::$app->security->generatePasswordHash($model->password);
-            if ($model->save())
-            {
-                $auth = Yii::$app->authManager;
-                $role = $auth->createRole(Yii::$app->request->post('author'));
-                $auth->assign($role, $model->id);
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        $model = new Department();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -70,7 +59,7 @@ class UserController extends MyController
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing Department model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -79,25 +68,18 @@ class UserController extends MyController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $arr = \Yii::$app->authManager->getRolesByUser(Yii::$app->user->id);
-        $role = array_keys($arr)[0];
-        if(Yii::$app->user->id != $id && $role != 'admin'){
-            throw new ForbiddenHttpException('You have no right to change other people\'s information');
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
-        if ($model->load(Yii::$app->request->post())) {
-            $model->password = Yii::$app->security->generatePasswordHash($model->password);
-            if ($model->save())
-            {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
+
         return $this->render('update', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing Department model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -111,15 +93,15 @@ class UserController extends MyController
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Department model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return User the loaded model
+     * @return Department the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = Department::findOne($id)) !== null) {
             return $model;
         }
 

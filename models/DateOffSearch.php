@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\User;
+use app\models\DateOff;
 
 /**
- * UserSearch represents the model behind the search form of `app\models\User`.
+ * DateOffSearch represents the model behind the search form of `app\models\DateOff`.
  */
-class UserSearch extends User
+class DateOffSearch extends DateOff
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'id_department'], 'integer'],
-            [['username', 'password', 'authKey', 'accessToken'], 'safe'],
+            [['id', 'id_user', 'status'], 'integer'],
+            [['date_create', 'date_end'], 'safe'],
         ];
     }
 
@@ -40,8 +40,7 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
-
+        $query = DateOff::find();
 
         // add conditions that should always apply here
 
@@ -60,10 +59,11 @@ class UserSearch extends User
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'id_department' => $this->id_department,
+            'id_user' => $this->id_user,
+            'date_create' => $this->date_create,
+            'date_end' => $this->date_end,
+            'status' => $this->status,
         ]);
-
-        $query->andFilterWhere(['like', 'username', $this->username]);
 
         return $dataProvider;
     }

@@ -16,3 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <code><?= __FILE__ ?></code>
 </div>
+<?php
+use app\components\HelloWidget;
+?>
+<?= HelloWidget::widget(['message' => 'Good morning']) ?>
